@@ -407,5 +407,8 @@ module.exports = {
     daysHrsMin: "días hrs min",
     hrsMinSec: "hrs min seg",
     downloadFirmware: "Descargar Firmware",
-    upgradeFirmware: "Actualización de Firmware"
+    upgradeFirmware: "Actualización de Firmware",
+    addAccount: "Add Account",
+    logOutAll: "Log Out All Accounts",
+    accounts: "Accounts"
 };
