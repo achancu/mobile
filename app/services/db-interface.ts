@@ -2,7 +2,7 @@ import _ from "lodash";
 import Config from "../config";
 import { sqliteToJs } from "../utilities";
 import { Download, FileTypeUtils } from "../store/types";
-import { DownloadTableRow, NotesTableRow } from "../store/row-types";
+import {AccountsTableRow, DownloadTableRow, NotesTableRow} from "../store/row-types";
 
 const log = Config.logger("DbInterface");
 
@@ -868,5 +868,35 @@ export default class DatabaseInterface {
                 })
             )
             .catch((err) => Promise.reject(new Error(`error fetching notes: ${err}`)));
+    }
+
+    public getAllAccounts(): Promise<AccountsTableRow[]> {
+        return this.getDatabase()
+            .then((db) => db.query("SELECT * FROM accounts"))
+            .then((rows) => sqliteToJs(rows))
+            .then((rows) => {
+                return rows;
+            })
+            .catch((err) => Promise.reject(new Error(`error fetching accounts: ${err}`)));
+    }
+
+    public addOrUpdateAccounts(account: any): Promise<AccountsTableRow> {
+        return this.getDatabase()
+            .then((db) =>
+                db.query(`SELECT id FROM accounts WHERE portal_id = ?`, [account.portalId]).then((maybeId) => {
+                    console.log('maybeId', maybeId);
+                    if (maybeId.length == 0) {
+                        return db.execute(`INSERT INTO accounts (name, email, portal_id, token) VALUES (?, ?, ?, ?)`, [account.name, account.email, account.portalId, account.token]);
+                    }
+                    const values = [account.name, account.email, account.portalId, account.token, maybeId[0].id];
+                    return db.execute(`UPDATE accounts SET name = ?, email = ?, portal_id = ?, token = ? WHERE id = ?`, values);
+                })
+            )
+            .catch((err) => Promise.reject(new Error(`error fetching accounts: ${err}`)));
+    }
+
+    public deleteAllAccounts(): Promise<AccountsTableRow[]> {
+        return this.getDatabase()
+            .then((db) => db.query("DELETE FROM accounts"))
     }
 }

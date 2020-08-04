@@ -75,3 +75,11 @@ export interface NotesTableRow {
     notes: string;
     notesObject: object | null;
 }
+
+export interface AccountsTableRow {
+    id: number;
+    name: string;
+    email: string;
+    portalId: string;
+    token: string;
+}

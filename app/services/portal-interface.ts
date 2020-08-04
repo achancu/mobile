@@ -4,6 +4,7 @@ import AppSettings from "../wrappers/app-settings";
 import { Download, FileTypeUtils } from "../store/types";
 import { AuthenticationError } from "../lib/errors";
 import Config from "../config";
+import * as ActionTypes from "../store/actions";
 
 type ProgressFunc = (total: number, copied: number, info: object) => void;
 
@@ -18,6 +19,7 @@ export default class PortalInterface {
     _dbInterface: any;
     _fs: any;
     _conservify: any;
+    _store: any;
     _currentUser: any;
     _appSettings: any;
 
@@ -26,6 +28,7 @@ export default class PortalInterface {
         this._dbInterface = services.Database();
         this._fs = services.FileSystem();
         this._conservify = services.Conservify();
+        this._store = services.Store();
         this._currentUser = {};
         this._appSettings = new AppSettings();
     }
@@ -40,7 +43,7 @@ export default class PortalInterface {
         });
     }
 
-    private storeCurrentUser(refreshed) {
+    private storeCurrentUser(refreshed, accessToken) {
         return this.query({
             refreshed: refreshed || false,
             authenticated: true,
@@ -49,6 +52,10 @@ export default class PortalInterface {
         }).then((data) => {
             this._currentUser.name = data.name;
             this._currentUser.portalId = data.id;
+            this._currentUser.email = data.email;
+            this._currentUser.token = accessToken;
+            this._store.dispatch(ActionTypes.UPDATE_ACCOUNT, {...this._currentUser});
+
             return data;
         });
     }
@@ -88,6 +95,7 @@ export default class PortalInterface {
 
     public logout() {
         this._appSettings.remove("accessToken");
+        this._store.dispatch(ActionTypes.LOGOUT_ACCOUNTS);
         return Promise.resolve(true);
     }
 
@@ -241,7 +249,7 @@ export default class PortalInterface {
         // Headers should always be lower case, bug otherwise.
         const accessToken = response.headers.authorization;
         this._appSettings.setString("accessToken", accessToken);
-        return this.storeCurrentUser(true).then(() => {
+        return this.storeCurrentUser(true, accessToken).then(() => {
             return {
                 token: accessToken,
             };

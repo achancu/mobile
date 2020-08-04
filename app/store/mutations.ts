@@ -23,6 +23,9 @@ export const TRANSFER_CLOSE = "TRANSFER_CLOSE";
 
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
+export const LOAD_ACCOUNTS = "LOAD_ACCOUNTS";
+export const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
+export const LOGOUT_ACCOUNTS = "LOGOUT_ACCOUNTS";
 
 export const STATION_QUERIED = "STATION_QUERIED";
 export const STATION_ACTIVITY = "STATION_ACTIVITY";
