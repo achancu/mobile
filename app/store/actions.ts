@@ -57,3 +57,6 @@ export const SAVE_NOTES = "SAVE_NOTES";
 // Portal
 
 export const UPDATE_PORTAL = "UPDATE_PORTAL";
+export const LOAD_ACCOUNTS = "LOAD_ACCOUNTS";
+export const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
+export const LOGOUT_ACCOUNTS = "LOGOUT_ACCOUNTS";
