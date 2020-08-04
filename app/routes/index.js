@@ -24,6 +24,7 @@ import DeployNotes from "../components/deploy/DeployNotesView";
 import DeployReview from "../components/deploy/DeployReviewView";
 
 import { Route, RouteState } from "./navigate";
+import AddAccount from "~/components/AddAccount";
 
 const routes = {
     appSettings: new Route(AppSettings, {}),
@@ -36,6 +37,7 @@ const routes = {
     deployReview: new Route(DeployReview, {}),
     developerMenu: new Route(DeveloperMenu, { developer: true }),
     login: new Route(Login, { login: true }),
+    addAccount: new Route(AddAccount, {}),
     module: new Route(Module, {}),
     assembleStation: new Route(AssembleStation, {}),
     stations: new Route(StationListView, { listing: true }),
